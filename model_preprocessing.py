@@ -4,11 +4,13 @@ import sys
 # предварительная обработка числовых признаков
 from sklearn.preprocessing import StandardScaler # Импортируем стандартизацию от scikit-learn
 from sklearn.preprocessing import PowerTransformer  # Степенное преобразование от scikit-learn
+from sklearn.pipeline import Pipeline # Pipeline. Ни добавить, ни убавить
+
+from sklearn.compose import ColumnTransformer # т.н. преобразователь колонок
 
 #загрузка данных
-train_df = pd.read_csv(train/
-
-
+train_df = pd.read_csv(train/data_train.csv)
+test_df = pd.read_csv(test/data_test.csv)
 
 class QuantileReplacer(BaseEstimator, TransformerMixin):
     def __init__(self, threshold=0.05):
@@ -34,24 +36,6 @@ class QuantileReplacer(BaseEstimator, TransformerMixin):
                     X_copy.loc[rare_mask, col] = high_quantile
                 else:
                     X_copy.loc[rare_mask, col] = low_quantile
-        return X_copy
-
-class RareGrouper(BaseEstimator, TransformerMixin):
-    def __init__(self, threshold=0.05, other_value='Other'):
-        self.threshold = threshold
-        self.other_value = other_value
-        self.freq_dict = {}
-
-    def fit(self, X, y=None):
-        for col in X.select_dtypes(include=['object']):
-            freq = X[col].value_counts(normalize=True)
-            self.freq_dict[col] = freq[freq >= self.threshold].index.tolist()
-        return self
-
-    def transform(self, X, y=None):
-        X_copy = X.copy()
-        for col in X.select_dtypes(include=['object']):
-            X_copy[col] = X_copy[col].apply(lambda x: x if x in self.freq_dict[col] else self.other_value)
         return X_copy
 
 num_pipe_distance = Pipeline([
@@ -81,3 +65,19 @@ preprocessors_num = ColumnTransformer(transformers=[
 columns_num = np.hstack([num_distance,
                     num_engine,
                     num_year,])
+
+# не забываем удалить целевую переменную цену из признаков
+X_train,y_train = train_df.drop(columns = ['Price(euro)']), train_df['Price(euro)']
+X_val, y_val = test_df.drop(columns = ['Price(euro)']), test_df['Price(euro)']
+
+# Сначала преобразуем на тренировочных данных
+X_train_prep = preprocessors_num.fit_transform(X_train)
+# потом на тестовых
+X_val_prep = preprocessors_num.transform(X_val)
+
+#Сохраняем скалированные данные
+X_train.to_csv(f'/train/X_train.csv', index = False)
+y_train.to_csv(f'/train/y_train.csv', index = False)
+
+X_val.to_csv(f'/test/X_val.csv', index = False)
+y_val.to_csv(f'/test/y_val.csv', index = False)
