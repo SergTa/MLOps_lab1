@@ -1,17 +1,13 @@
-
-import numpy as np # библиотека Numpy для операций линейной алгебры и прочего
-import matplotlib.pyplot as plt # библиотека Matplotlib для визуализации
-import seaborn as sns # библиотека seaborn для визуализации
-import numpy as np # библиотека Numpy для операций линейной алгебры и прочего
-
+import pandas as pd
+import sys
 
 # предварительная обработка числовых признаков
 from sklearn.preprocessing import StandardScaler # Импортируем стандартизацию от scikit-learn
 from sklearn.preprocessing import PowerTransformer  # Степенное преобразование от scikit-learn
 
-from sklearn.pipeline import Pipeline # Pipeline
-from sklearn.compose import ColumnTransformer # т.н. преобразователь колонок
-from sklearn.base import BaseEstimator, TransformerMixin # для создания собственных преобразователей / трансформеров данных
+#загрузка данных
+train_df = pd.read_csv(train/
+
 
 
 class QuantileReplacer(BaseEstimator, TransformerMixin):
