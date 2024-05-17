@@ -15,7 +15,7 @@ os.makedirs ('test', exist_ok = True)
 DF = pd.read_csv('https://raw.githubusercontent.com/dayekb/mpti_ml/main/data/cars_moldova_clean.csv', delimiter = ',')
 
 # не забываем выделить целевую переменную цену из признаков
-X,y = DF.drop(columns = ['Price(euro)']), DF['Price(euro)']
+X, y = DF.drop(columns=['Price(euro)']), DF['Price(euro)']
 
 # разбиваем на тестовую и тренировочную выборку 
 X_train, X_val, y_train, y_val = train_test_split(X, y,
@@ -23,8 +23,15 @@ X_train, X_val, y_train, y_val = train_test_split(X, y,
                                                     random_state=42)
 
 #Сохраняем данные
-df_train = pd.DataFrame(X_train, y_train)
-df_train.to_csv(f'train/data_train.csv', index = False)
+X_train = pd.DataFrame(X_train)
+y_train = pd.DataFrame(y_train)
+X_train.to_csv(f'train/X_train.csv', index=False)
+y_train.to_csv(f'train/y_train.csv', index=False)
 
-df_test = pd.DataFrame(X_val, y_val)
-df_test.to_csv(f'test/data_test.csv', index = False)
+X_test = pd.DataFrame(X_val)
+y_test = pd.DataFrame(y_val)
+X_test.to_csv(f'test/X_test.csv', index=False)
+y_test.to_csv(f'test/y_test.csv', index=False)
+
+print (X_train.info())
+print (y_train.info())
