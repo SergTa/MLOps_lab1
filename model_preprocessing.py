@@ -83,14 +83,14 @@ X_train_prep = preprocessors_num.fit_transform(X_train)
 # потом на тестовых
 X_test_prep = preprocessors_num.transform(X_test)
 
-X_train_prep = pd.DataFrame(X_train_prep)
-X_test_prep = pd.DataFrame(X_test_prep)
+X_train_prep = pd.DataFrame(X_train_prep, columns=columns_num)
+X_test_prep = pd.DataFrame(X_test_prep, columns=columns_num)
 
 # Сохраняем скалированные данные
-#X_train_prep.to_csv(f'/train/X_train_prep.csv', index=False)
+X_train_prep.to_csv('train/X_train.csv'.replace('.csv', '_preprocessed.csv'), index=False)
 #y_train.to_csv(f'/train/y_train.csv', index=False)
 
-#X_test_prep.to_csv(f'/test/X_test_prep.csv', index=False)
+X_test_prep.to_csv('test/X_test.csv'.replace('.csv', '_preprocessed.csv'), index=False)
 #y_val.to_csv(f'/test/y_val.csv', index=False)
 
-print (X_train_prep.info())
+#print (X_train_prep.info())
