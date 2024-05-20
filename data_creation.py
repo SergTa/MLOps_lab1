@@ -1,37 +1,72 @@
-import pandas as pd # Библиотека Pandas для работы с табличными данными
+# Синтез и сохранение в созданных директориях тренировочного и тестового дата-сета температуры
+# Внесение аномалий нормальным законом распределения (белый шум)
+
+import numpy as np
+import pandas as pd
 import os
-from sklearn.model_selection import train_test_split#  функция разбиения на тренировочную и тестовую выборку
+import sys
 
-#Создание папок для тренировочной и тестовой выборки
-os.makedirs ('train', exist_ok = True)
-os.makedirs ('test', exist_ok = True)
+# Создание директорий тренировочной и тестовой 'train' и 'test'
+os.makedirs('train', exist_ok=True)
+os.makedirs('test', exist_ok=True)
 
-#Набор данных
-#Набор данных представляет собой статистику параметров автомобилей на вторичном рынке в Молдавии.
-#Набор включает ряд категориальных и численных значений, составляющих одну запись (строку). Число записей можно найти как число строк.
-#Каждый столбец в записи — это отдельный параметр.
-#Среди указанных параметров приведен целевой для задачи предсказания (регрессии) - цена автомобиля.
 
-DF = pd.read_csv('https://raw.githubusercontent.com/dayekb/mpti_ml/main/data/cars_moldova_clean.csv', delimiter = ',')
+# Синтез данных
+def generate_data(n_samples,
+                  anomaly_ratio=0.1,
+                  anomaly_loc=30,
+                  anomaly_scale=10):
 
-# не забываем выделить целевую переменную цену из признаков
-X, y = DF.drop(columns=['Price(euro)']), DF['Price(euro)']
+    # Синтез данных без аномалий
+    data = np.random.normal(loc=20, scale=5, size=(n_samples, 1))
 
-# разбиваем на тестовую и тренировочную выборку 
-X_train, X_val, y_train, y_val = train_test_split(X, y,
-                                                    test_size=0.3,
-                                                    random_state=42)
+    # ВЫчисление числа аномалий
+    n_anomalies = int(n_samples * anomaly_ratio)
 
-#Сохраняем данные
-X_train = pd.DataFrame(X_train)
-y_train = pd.DataFrame(y_train)
-X_train.to_csv(f'train/X_train.csv', index=False)
-y_train.to_csv(f'train/y_train.csv', index=False)
+    # Добавление аномалий
+    anomalies = np.random.normal(loc=anomaly_loc, scale=anomaly_scale,
+                                 size=(n_anomalies, 1))
+    data = np.concatenate((data, anomalies), axis=0)
 
-X_test = pd.DataFrame(X_val)
-y_test = pd.DataFrame(y_val)
-X_test.to_csv(f'test/X_test.csv', index=False)
-y_test.to_csv(f'test/y_test.csv', index=False)
+    # Округление до одного знака после запятой
+    data = np.round(data, 1)
 
-print (X_train.info())
-print (y_train.info())
+    # Синтез второй колонки с указателями аномалии
+    labels = np.zeros(data.size, dtype=int)
+    labels[n_samples:] = 1  # Цифра 1 указывает на аномалию
+
+    # Создание структурированного массива (списка кортежей)
+    dtype = [('data', np.float32), ('labels', np.int32)]
+    data_with_labels = np.empty(data.size, dtype=dtype)
+    data_with_labels['data'] = data.flatten()
+    data_with_labels['labels'] = labels
+
+    # Создание словаря из списка кортежей
+    data_dict = {'temperature': [temp for temp, anomaly in data_with_labels],
+                 'anomaly': [anomaly for temp, anomaly in data_with_labels]}
+
+    return data_dict
+
+
+# Получение номера дата-сета
+if len(sys.argv) > 1:
+    n_datasets = int(sys.argv[1])
+else:
+    n_datasets = 1  # Значение по умолчанию, если аргумент пропущен
+
+for i in range(n_datasets):
+    # Синтез и сохраненине тренировочных данных
+    train_data = generate_data(1000,
+                               anomaly_ratio=0.1,
+                               anomaly_loc=30+i*5,
+                               anomaly_scale=10+i*2)
+    df_train = pd.DataFrame(train_data)
+    df_train.to_csv(f'train/X_train_{i+1}.csv', index=False)
+
+    # Синтез и сохранение тестовых данных
+    test_data = generate_data(200,
+                              anomaly_ratio=0.1,
+                              anomaly_loc=30+i*5,
+                              anomaly_scale=10+i*2)
+    df_test = pd.DataFrame(test_data)
+    df_test.to_csv(f'test/X_test_{i+1}.csv', index=False)

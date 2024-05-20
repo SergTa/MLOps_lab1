@@ -1,39 +1,63 @@
+# Тестирование модели (валидация)
+
+# Импорт библиотек
 import pandas as pd
-import numpy as np # библиотека Numpy для операций линейной алгебры и прочего
-import matplotlib.pyplot as plt # библиотека Matplotlib для визуализации
-import seaborn as sns # библиотека seaborn для визуализации
-import joblib 
+from sklearn.metrics import (
+    accuracy_score,
+    precision_score,
+    recall_score,
+    f1_score,
+)
+import joblib
+import sys
 
 
-from sklearn.model_selection import ShuffleSplit # при кросс-валидации случайно перемешиваем данные
-from sklearn.model_selection import cross_validate # функция кросс-валидации от Scikit-learn
+# Функция для теста модели
+def test_model(model_path, test_data_path):
+    # Загрузка модели
+    model = joblib.load(model_path)
 
-from sklearn.metrics import mean_squared_error as mse # метрика MSE от Scikit-learn
-from sklearn.metrics import r2_score # коэффициент детерминации  от Scikit-learn
+    # Загрузка тестовых данных
+    df_test = pd.read_csv(test_data_path)
 
-from sklearn.metrics import PredictionErrorDisplay # Класс визуализации ошибок модели
+    # Отделение признаков и целевой переменной
+    X_test = df_test[['temperature']]
+    y_test = df_test['anomaly']
 
-model = joblib.load('models/model.pkl')
-X_train = pd.read_csv(train/X_train.csv)
-y_train = pd.read_csv(train/y_train.csv)
-X_val = pd.read_csv(test/X_val.csv)
-y_val = pd.read_csv(test/y_val.csv)
+    # Предсказание на тестовой выборке
+    y_pred = model.predict(X_test)
 
-#Оценка метрик
-def calculate_metric(model_pipe, X, y, metric = r2_score):
-    """Расчет метрики.
-    Параметры:
-    ===========
-    model_pipe: модель или pipeline
-    X: признаки
-    y: истинные значения
-    metric: метрика (r2 - по умолчанию)
-    """
-    y_model = model_pipe.predict(X)
-    return metric(y, y_model)
+    # Вычисление метрик
+    accuracy = accuracy_score(y_test, y_pred)
+    precision = precision_score(y_test, y_pred)
+    recall = recall_score(y_test, y_pred)
+    f1 = f1_score(y_test, y_pred)
 
-print(f"r2 на тренировочной выборке: {calculate_metric(model, X_train, y_train):.4f}")
-print(f"r2 на валидационной выборке: {calculate_metric(model, X_val, y_val):.4f}")
+    # Создание дата-сета с результатами
+    results = pd.DataFrame({
+        'Accuracy': [accuracy],
+        'Precision': [precision],
+        'Recall': [recall],
+        'F1-score': [f1]
+    })
 
-print(f"mse на тренировочной выборке: {calculate_metric(model, X_train, y_train, mse):.4f}")
-print(f"mse на валидационной выборке: {calculate_metric(model, X_val, y_val, mse):.4f}")
+    return results
+
+
+# Получение номера дата-сета
+if len(sys.argv) > 1:
+    n_datasets = int(sys.argv[1])
+else:
+    n_datasets = 1  # По умолчанию
+print()
+for i in range(n_datasets):
+    # Путь к модели
+    model_path = f'models/model_{i+1}.pkl'
+    # Путь к тестовым данным
+    test_data_path = f'test/X_test_{i+1}_prep.csv'
+
+    # Тестирование модели
+    results = test_model(model_path, test_data_path)
+    print(f"The model on the dataset # {i+1} has been tested successfully.")
+    print(results.to_string(index=False))
+    print('-' * 20)
