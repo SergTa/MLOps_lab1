@@ -70,7 +70,7 @@ for i in range(n_datasets):
     # Сохранение обученной модели
     joblib.dump(model, f'models/model_{i+1}.pkl')
 
-    print(f"The model on the data set # {i+1} has been tested successfully.")
+    print(f"The model on the data set # {i+1} has been trained successfully.")
     print(results.to_string(index=False))
 
 
