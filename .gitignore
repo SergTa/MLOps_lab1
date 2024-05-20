@@ -3,6 +3,6 @@
 venv
 model_1.pkl
 X_test_1.csv
-test/X_test_1_prep.csv
+X_test_1_prep.csv
 X_train_1.csv
-train/X_train_1_prep.csv
+X_train_1_prep.csv
