@@ -1,8 +1,8 @@
 .idea
 .venv
 venv
-model_1.pkl
-X_test_1.csv
-X_test_1_prep.csv
-X_train_1.csv
-X_train_1_prep.csv
+/models/model_1.pkl
+/test/X_test_1.csv
+/test/X_test_1_prep.csv
+/train/X_train_1.csv
+/train/X_train_1_prep.csv
