@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/python
 
 n_datasets=$1 # Установка номера дата-сета
 
