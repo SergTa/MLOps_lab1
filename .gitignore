@@ -1,5 +1,6 @@
 .idea
 .venv
+venv
 model_1.pkl
 X_test_1.csv
 X_test_1_prep.csv
