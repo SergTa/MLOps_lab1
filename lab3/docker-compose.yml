@@ -7,7 +7,7 @@ services:
     ports:
       - "5000:5000"
 
- StreamlitApp:
+ streamlit_app:
     build: ./streamlit_app
     volumes:
       - model_volume:/models

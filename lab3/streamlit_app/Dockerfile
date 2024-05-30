@@ -1,5 +1,5 @@
 # Python image
-FROM python:3.8-slim
+FROM python:3.8
 
 # Setting the working directory in the container
 WORKDIR /streamlit_app
