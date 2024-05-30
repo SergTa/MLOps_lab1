@@ -11,4 +11,4 @@ COPY . .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Launching the application
-CMD ["python", "Models.py"]
+CMD ["python", "models_py.py"]
