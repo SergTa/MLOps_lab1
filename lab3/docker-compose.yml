@@ -1,21 +1,21 @@
 version: '3.8'
 services:
  Models:
-    build: ./Models
+    build: ./models
     volumes:
-      - model_volume:/Models
+      - model_volume:/models
     ports:
       - "5000:5000"
 
  StreamlitApp:
     build: ./StreamlitApp
     volumes:
-      - model_volume:/Models
+      - model_volume:/models
       - streamlit_volume:/StreamlitApp
     ports:
       - "8501:8501"
     depends_on:
-      - Models
+      - models
 
 volumes:
  model_volume:
