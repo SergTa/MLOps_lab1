@@ -2,7 +2,7 @@
 FROM python:3.8-slim
 
 # Setting the working directory in the container
-WORKDIR /Models
+WORKDIR /models
 
 # Copying files
 COPY . .

@@ -8,10 +8,10 @@ services:
       - "5000:5000"
 
  StreamlitApp:
-    build: ./StreamlitApp
+    build: ./streamlit_app
     volumes:
       - model_volume:/models
-      - streamlit_volume:/StreamlitApp
+      - streamlit_volume:/streamlit_app
     ports:
       - "8501:8501"
     depends_on:

@@ -2,7 +2,7 @@
 FROM python:3.8-slim
 
 # Setting the working directory in the container
-WORKDIR /StreamlitApp
+WORKDIR /streamlit_app
 
 # Copying files
 COPY . .
@@ -11,4 +11,4 @@ COPY . .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Launching the application
-CMD ["streamlit", "run", "StreamliApp.py"]
+CMD ["streamlit", "run", "streamlit_app.py"]
