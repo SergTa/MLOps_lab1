@@ -49,8 +49,3 @@ How to use
 The Streamlit app allows you to enter parameters to predict Iris species.
 
 Use the sliders to enter the length and width of the sepal and petal, and then click "Predict" to get the model prediction.
-
-Application screenshot
-
-Лицензия
-This project is distributed under the MIT licence.
