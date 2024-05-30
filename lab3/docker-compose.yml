@@ -1,13 +1,13 @@
 version: '3.8'
 services:
- model:
+ Models:
     build: ./Models
     volumes:
       - model_volume:/Models
     ports:
       - "5000:5000"
 
- streamlit_app:
+ StreamlitApp:
     build: ./StreamlitApp
     volumes:
       - model_volume:/Models
