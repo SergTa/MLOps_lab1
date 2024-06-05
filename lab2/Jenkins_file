@@ -54,28 +54,28 @@ pipeline {
         stage('Create dataset') {
             steps {
                 echo 'Start create dataset'
-                sh 'python3 lab2/python_scripts/create_dataset.py'
+                sh 'python3 lab2/Create_Data_set.py'
                 echo 'Finish create dataset'
             }
         }
         stage('Data preprocessing') {
             steps {
                 echo 'Start data preprocessing'
-                sh 'python3 lab2/python_scripts/data_preprocessing.py'
+                sh 'python3 lab2/Data_preproc.py'
                 echo 'Finish data preprocessing'
             }
         }
         stage('Train model') {
             steps {
                 echo 'Start train model'
-                sh 'python3 lab2/python_scripts/train_model.py'
+                sh 'python3 lab2/train_model.py'
                 echo 'Finish train model'
             }
         }
         stage('Test model') {
             steps {
                 echo 'Start test model'
-                sh 'python3 lab2/python_scripts/test_model.py'
+                sh 'python3 lab2/test_model.py'
                 echo 'Finish test model'
             }
         }
