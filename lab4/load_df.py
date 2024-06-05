@@ -7,4 +7,4 @@ import pandas as pd
 df, _ = titanic()
 
 # Сохранение в CSV
-df.to_csv('../datasets/titanic/titanic_data.csv', index=False)
+df.to_csv('../datasets/titanic/titanic_df.csv', index=False)
