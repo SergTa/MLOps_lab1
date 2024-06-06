@@ -2,7 +2,7 @@
 import pandas as pd
 
 # Загрузка датасета
-df = pd.read_csv('../datasets/titanic_df.csv')
+df = pd.read_csv('./datasets/titanic_df.csv')
 
 # Заполнение пропущенных значений в поле "Age" средним значением
 mean_age = df['Age'].mean()

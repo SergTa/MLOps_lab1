@@ -6,5 +6,5 @@ import pandas as pd
 # Загрузка датасета
 df, _ = titanic()
 
-# Сохранение в CSV
-df.to_csv('../datasets/titanic_df.csv', index=False)
+# Сохранение
+df.to_csv('./datasets/titanic_df.csv', index=False)
