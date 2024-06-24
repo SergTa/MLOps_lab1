@@ -1,0 +1,13 @@
+fastapi
+uvicorn
+pydantic
+requests
+sacremoses
+dvc
+dvc-gdrive
+sentencepiece
+transformers[torch]
+httpx
+pytest
+pandas
+allure-pytest
