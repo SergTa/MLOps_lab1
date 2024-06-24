@@ -4,7 +4,7 @@ from ast import literal_eval
 import allure
 import pandas as pd
 
-DATASET_PATH = "data/datasets/dataset.csv"
+DATASET_PATH = "data/dataset.csv"
 test_data = pd.read_csv(filepath_or_buffer=DATASET_PATH)
 
 
